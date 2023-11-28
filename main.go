@@ -4,6 +4,18 @@ import (
 	"fmt"
 )
 
+func sayHello() {
+	fmt.Println("Hello World")
+}
+
+func sayHello2(name string) {
+	fmt.Printf("Hello %s\n", name)
+}
+
+func add(a int, b int) int {
+	return a + b
+  }
+
 // Define a struct type
 type Student struct {
 	Name    string
@@ -32,6 +44,59 @@ type Address struct {
 	City    string
 	ZipCode int
 }
+
+//--------------------------------------
+// Define the Student struct
+type StudentReceiver struct {
+	Firstname string
+	Lastname  string
+}
+// Method with a receiver of type Student
+// This method returns the full name of the student
+func (s StudentReceiver) FullName() string {
+	return s.Firstname + " " + s.Lastname
+}
+// Define a struct type
+type Rectangle struct {
+	Length float64
+	Width  float64
+}
+// Method with a receiver of type Rectangle
+func (r Rectangle) Area() float64 {
+	return r.Length * r.Width
+}
+
+
+//------------------------------------
+// Speaker interface
+type Speaker interface {
+	Speak() string
+}
+// Dog struct
+type Dog struct {
+	Name string
+}
+
+// Dog's implementation of the Speaker interface
+func (d Dog) Speak() string {
+	return "Woof!"
+}
+
+// Person struct
+type PersonInter struct {
+	Name string
+}
+
+// Person's implementation of the Speaker interface
+func (p PersonInter) Speak() string {
+	return "Hello!"
+}
+
+// function that accepts Speaker interface
+func makeSound(s Speaker) {
+	fmt.Println(s.Speak())
+}
+
 
 func main() {
 	// longhand
@@ -71,7 +136,6 @@ func main() {
 	
 	// DayofWeek 
 	var dayOfWeek int = 7
-	
 	switch dayOfWeek {
 	case 1:
 		fmt.Println("Monday")
@@ -268,5 +332,41 @@ func main() {
 
 
 	// Function
+	sayHello()
+	sayHello()
+	sayHello()
+	//parameter function 
+	sayHello2("mike")
+	sayHello2("mikelopster")
+	sayHello2("tanitphon")
+	//return function
+	number1 := 3
+	number2 := 5
+	sumNumber := add(number1, number2)
+	fmt.Println(sumNumber)
 	
+
+	//Receiver Method
+	StudentRec := StudentReceiver{
+		Firstname: "Mike",
+		Lastname:  "Lopster",
+	}
+	// Call the FullName method on the Student instance
+	fullNameRec := StudentRec.FullName()
+	fmt.Println("Full Name of the student:", fullNameRec)
+	// Receiver exp2
+	rect := Rectangle{Length: 10, Width: 5}
+	// Call the Area method on Rectangle instance
+	area := rect.Area()
+	fmt.Println("Area of rectangle:", area)
+
+
+	// Interface
+	dog := Dog{Name: "Buddy"}
+	personIn := PersonInter{Name: "Alice"}
+
+	makeSound(dog)
+	makeSound(personIn)
+
+
 }
