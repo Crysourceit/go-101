@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 )
 
@@ -95,6 +96,48 @@ func (p PersonInter) Speak() string {
 // function that accepts Speaker interface
 func makeSound(s Speaker) {
 	fmt.Println(s.Speak())
+}
+
+//-------------------------------------------
+// Use case 1
+type Employee struct {
+	Name   string
+	Salary int
+}
+
+// Function to give a raise to an employee
+func giveRaise(e *Employee, raise int) {
+	e.Salary += raise
+}
+
+//------------------------------------------------
+// Error
+// divide divides two integers and returns an error if the divisor is 0
+func divide(a, b int) (int, error) {
+	if b == 0 {
+		return 0, errors.New("cannot divide by zero")
+	}
+	return a / b, nil
+}
+
+// Custom Error
+// LoginError is a custom error type for login failures
+type LoginError struct {
+	Username string
+	Message  string
+}
+// Implement the Error() method to satisfy the error interface
+func (e *LoginError) Error() string {
+	return fmt.Sprintf("Login error for user '%s': %s", e.Username, e.Message)
+}
+// Simulated function that attempts a user login
+func login(username, password string) error {
+	// Simulate checking username and password
+	if username != "admin" || password != "password123" {
+		return &LoginError{Username: username, Message: "invalid credentials"}
+	}
+	// Login successful
+	return nil
 }
 
 
@@ -369,4 +412,50 @@ func main() {
 	makeSound(personIn)
 
 
+	// Pointer
+	// Declare an integer variable
+	x := 10
+	// Declare a pointer to an integer and assign it the address of x
+	var p *int = &x
+	// Print the value of x and the value at the pointer p
+	fmt.Println("Value of x:", x)  // Output: Value of x: 10
+	fmt.Println("Value at p:", *p) // Output: Value at p: 10
+	// Modify the value at the pointer p
+	*p = 20
+	// x is modified since p points to x
+	fmt.Println("New value of x:", x) // Output: New value of x: 20
+	
+	// Use case 1
+	emp := Employee{Name: "John Doe", Salary: 50000}
+
+	giveRaise(&emp, 5000)
+	fmt.Println("After raise:", emp)
+	
+
+
+	// // Handling Error in go
+	// // ท่าปกติ
+	// result, err := divide(10, 0)
+	// if err != nil {
+	// 	fmt.Println("Error:", err)
+	// 	return
+	// }
+	// fmt.Println("Result:", result)
+	
+	// ท่า Custom Error
+	// Attempt to login with wrong credentials
+	err := login("user", "pass")
+	if err != nil {
+		switch e := err.(type) {
+		case *LoginError:
+			// Custom error handling
+			fmt.Println("Custom error occurred:", e)
+		default:
+			// Other types of errors
+			fmt.Println("Generic error occurred:", e)
+		}
+		return
+	}
+	// Continue with the rest of the program if login is successful
+	fmt.Println("Login successful!")
 }
